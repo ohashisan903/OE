@@ -1,0 +1,103 @@
+<?php
+# PHP script:
+# Paul Ohashi
+# Trans Cable International
+# Started: July 2025
+#
+# This script is one part of an overall full-stack package of technologies including:
+#
+# Need some error reporting...yes, of course, because this tangled web of tech is madness...
+#ini_set('display_errors', 1);
+#ini_set('display_startup_errors', 1);
+#error_reporting(E_ALL);
+
+require_once 'oeeFunctions.php';
+# Scrap line graph
+require_once './functions/scrapFunction.php';
+?>
+<html>
+<head>
+    <title>Line Graph</title>
+	<!-- Load the chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<!-- A pointer to CSS that makes it pretty. -->
+	<link rel="stylesheet" href="newstyle.css">
+	<!-- Real time updates on dashboard -->
+	<meta http-equiv="refresh" content="60">
+<!-- Scrap line graph (canvas and script) -->
+<canvas id="scrapLineChart" width="750" height="250"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+<body>
+    <h2 style="
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.0em;
+    background: linear-gradient(to right, #0077ff, #00c3ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+    letter-spacing: 1px;">
+<?php
+$conn = connectRubiconTci();
+$monthlyScrap = getMonthlyScrapTotals($conn);
+
+// Convert to JSON for JavaScript
+$lbsJSON = json_encode(array_values($monthlyScrap["lbs"]));
+$qtyJSON = json_encode(array_values($monthlyScrap["qty"]));
+$extJSON = json_encode(array_values($monthlyScrap["ext"]));
+?>
+    <canvas id="scrapLineChart" width="600" height="250"></canvas>
+
+    <script>
+    const ctx = document.getElementById('scrapLineChart').getContext('2d');
+
+    const scrapChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+            datasets: [
+                {
+                    label: 'Scrap Pounds',
+                    data: <?php echo $lbsJSON; ?>,
+                    borderColor: '#1e90ff',
+                    backgroundColor: 'rgba(30,144,255,0.1)',
+                    borderWidth: 2
+                },
+                {
+                    label: 'Scrap Footage',
+                    data: <?php echo $qtyJSON; ?>,
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40,167,69,0.1)',
+                    borderWidth: 2
+                },
+                {
+                    label: 'Scrap Cost',
+                    data: <?php echo $extJSON; ?>,
+                    borderColor: '#dc3545',
+                    backgroundColor: 'rgba(220,53,69,0.1)',
+                    borderWidth: 2,
+                    yAxisID: 'costAxis'
+                }
+            ]
+        },
+        options: {
+            responsive: false,
+	    maintainAspectRatio: false,
+            scales: {
+                costAxis: {
+                    type: 'linear',
+                    position: 'right',
+                    ticks: { callback: value => '$' + value }
+                }
+            }
+        }
+    });
+    </script>
+</td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<html>
+<head>
+<style>
+    body {
+        font-size: 22px;
+    }
+</style>
+
+
+</head>
+<body>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><td colspan=6 style="background-color: lightgrey;">MariaDB [tci]> <strong>desc v_lrb_transactions;</strong></td></tr>
+<tr><td> Field                </td><td> Type          </td><td> Null </td><td> Key </td><td> Default </td><td> Extra </td></tr>
+<tr><td> item_number          </td><td> varchar(255)  </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> item_description     </td><td> varchar(255)  </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> site                 </td><td> varchar(255)  </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> product_group        </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> lrb_number           </td><td> varchar(255)  </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> received_work_center </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> transaction_date     </td><td> date          </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> transaction_type     </td><td> varchar(255)  </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> transaction_quantity </td><td> decimal(12,3) </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> stock_unit           </td><td> varchar(255)  </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> transaction_cost     </td><td> decimal(14,5) </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> cost_unit            </td><td> varchar(255)  </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> transaction_cost_ext </td><td> double(19,2)  </td><td> NO   </td><td>     </td><td> 0.00    </td><td>       </td></tr>
+<tr><td> reference1           </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> reference2           </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> before_quantity      </td><td> decimal(12,3) </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> after_quantity       </td><td> decimal(13,3) </td><td> NO   </td><td>     </td><td> 0.000   </td><td>       </td></tr>
+<tr><td> before_cost          </td><td> decimal(14,5) </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> after_cost           </td><td> decimal(14,5) </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> user_name            </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> from_location_name   </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> to_location_name     </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> from_pallet_number   </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> to_pallet_number     </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> comment              </td><td> longtext      </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> document_type        </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> customer             </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> customer_number      </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> vendor               </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> vendor_number        </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>       </td></tr>
+<tr><td> product_group_id     </td><td> int(11)       </td><td> YES  </td><td>     </td><td> 0       </td><td>       </td></tr>
+<tr><td> created_date_time    </td><td> datetime      </td><td> NO   </td><td>     </td><td> NULL    </td><td>       </td></tr>
+
+<tr><td colspan=6>================================================================================================</td></tr>
+<tr><td colspan=6 style="background-color: lightgrey;">>MariaDB [tci]> <strong>desc item_lrb_transactions;</strong></td></tr>
+
+<tr><td> Field                </td><td> Type          </td><td> Null </td><td> Key </td><td> Default </td><td> Extra          </td></tr>
+
+<tr><td> id                   </td><td> int(11)       </td><td> NO   </td><td> PRI </td><td> NULL    </td><td> auto_increment </td></tr>
+<tr><td> item_id              </td><td> int(11)       </td><td> NO   </td><td> MUL </td><td> NULL    </td><td>                </td></tr>
+<tr><td> item_lrb_id          </td><td> int(11)       </td><td> NO   </td><td> MUL </td><td> NULL    </td><td>                </td></tr>
+<tr><td> site_id              </td><td> int(11)       </td><td> NO   </td><td> MUL </td><td> NULL    </td><td>                </td></tr>
+<tr><td> quantity_unit_id     </td><td> int(11)       </td><td> YES  </td><td> MUL </td><td> NULL    </td><td>                </td></tr>
+<tr><td> cost_unit_id         </td><td> int(11)       </td><td> YES  </td><td> MUL </td><td> NULL    </td><td>                </td></tr>
+<tr><td> item_transaction_id  </td><td> int(11)       </td><td> YES  </td><td> MUL </td><td> NULL    </td><td>                </td></tr>
+<tr><td> type                 </td><td> varchar(255)  </td><td> NO   </td><td> MUL </td><td> NULL    </td><td>                </td></tr>
+<tr><td> from_location_name   </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> to_location_name     </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> reference1           </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> reference2           </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> transaction_date     </td><td> date          </td><td> NO   </td><td> MUL </td><td> NULL    </td><td>                </td></tr>
+<tr><td> transaction_quantity </td><td> decimal(12,3) </td><td> NO   </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> transaction_cost     </td><td> decimal(14,5) </td><td> NO   </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> before_quantity      </td><td> decimal(12,3) </td><td> NO   </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> before_cost          </td><td> decimal(14,5) </td><td> NO   </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> after_cost           </td><td> decimal(14,5) </td><td> NO   </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> user_name            </td><td> varchar(255)  </td><td> YES  </td><td> MUL </td><td> NULL    </td><td>                </td></tr>
+<tr><td> from_pallet_number   </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> to_pallet_number     </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> created_date_time    </td><td> datetime      </td><td> NO   </td><td> MUL </td><td> NULL    </td><td>                </td></tr>
+<tr><td> modified_date_time   </td><td> datetime      </td><td> NO   </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> created_by_user      </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>                </td></tr>
+<tr><td> modified_by_user     </td><td> varchar(255)  </td><td> YES  </td><td>     </td><td> NULL    </td><td>                </td></tr>
+</table>

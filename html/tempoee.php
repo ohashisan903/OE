@@ -1,0 +1,169 @@
+<?php
+# PHP script: oee.php
+# Paul Ohashi
+# Trans Cable International
+# Started: July 2025
+#
+# This script is one part of an overall full-stack package of technologies including:
+#
+# * MySQL database (oee) to store the data - This may be obsolete as I'm now pulling data directly
+#	from rubicon.transcableusa.com - Maria DB.
+# * Python script to unpack a zipped up file containing a bunch of Rubicon reports
+#   and insert each report into its own database tables (only one table at the moment 'labor_efficiency').
+# * Need to pull data from Rubicon then insert it into DB instead of extracting from xlsx reports.
+# * IIS Web Site to display the data
+#
+# Need some error reporting...yes, of course, because this tangled web of code is madness...
+#ini_set('display_errors', 1);
+#ini_set('display_startup_errors', 1);
+#error_reporting(E_ALL);
+
+require_once './functions/oeeFunctions.php';
+require_once './functions/scrapFunction.php';
+#require_once './functions/oeeTestFunctions.php';
+?>
+<html>
+<head>
+	<!-- meta tag below - change dashboard view every X seconds. bounce from the OE dashboard to the sales dashboard -->
+	<!--meta http-equiv="refresh" content="60; URL='https://tci-bt-linux01/dev-oee/salesdashboard.php'"-->
+	<title>OE</title>
+
+        <title>OE</title>
+        <!-- Load the chart.js library -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- Refresh the dashboard every 5 minutes  -->
+        <meta http-equiv="refresh" content="300">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- pointer to CSS  -->
+        <link rel="stylesheet" href="./css/oedashboard.css">
+
+</head>
+<body background=#ffffff>
+
+<!-- PO: Header table with logo, four icons, TCI Operational Efficiency, four icons-->
+<table style="width: 100%; max-width: 100%; border: 0px solid #000;">
+    <tr>
+        <td colspan="4">
+
+    <div class="header-bar">
+
+        <!-- HEADER LEFT SIDE -->
+        <div class="header-left">
+            <img src="pics/TransCableLogo.png" class="header-logo">
+            <div class="header-left-text">
+	            Safety - Quality - Scrap - Rate
+            </div>
+        </div>
+
+        <!-- HEADER CENTER TITLE -->
+        <h2 class="header-title">
+            TCI Operational Efficiency
+        </h2>
+
+        <!-- HEADER RIGHT SIDE -->
+        <div class="header-right-text">
+                Safety - Quality - Scrap - Rate
+        </div>
+
+    </div>
+
+        </td>
+    </tr>
+</table>
+
+<!-- Master table with sub-tables embedded  -->
+<table style="width: 100%; border: 0px solid #000;">
+        <tr> 
+            <td style="width: 1%; vertical-align: top;">
+
+            <!-- Table 1 with clock and navigation links (Main, Quantity, Operations, Monitor, and shift aggregate -->
+            <table style="
+                    width: 50%;
+                    border-collapse: collapse;
+                    border: 0px solid #000;
+                    box-shadow:
+                    -8px 0 10px -5px rgba(0, 123, 255, 0.6),  /* Left glow */
+                    0 8px 10px -5px rgba(0, 123, 255, 0.6);   /* Bottom glow */">
+                    <thead>
+                        <tr>
+			    <!-- PO: controls the border of the links in the main
+				 navigation menu table  -->
+                            <th style="width: 100%; border: 0px solid #000;">
+                    		<?php echo displayClock();?>
+                    		<a href="/oee/oee.php" style="text-decoration: none; color: #36A2EB;">Main</a>
+                    		<br><hr color=#ddecf0>
+                    		<a href="/oee/quantByEmployee.php" style="text-decoration: none; color: #36A2EB;">Quantity</a>
+                    		<br><hr color=#ddecf0>
+                    		<a href="/oee/operations.php" style="text-decoration: none; color: #36A2EB;">Operations</a>
+                    		<hr color=#ddecf0>
+                    		<a href="/monitor/monitor.php" style="text-decoration: none; color: #36A2EB;">Monitor</a>
+                    		<hr color=#ddecf0>
+			    </th>
+                        </tr>
+
+                        <tr>
+			    <!-- PO: Controls a light blue border around the words
+				 "Shift Aggregate" in the main navigation menu  -->
+                            <td colspan=2 style="font-weight: bold; text-align: center; background-color: lightgrey; border: 0px solid #ddecf0;">
+                                Shift Aggregate
+                            </td>
+                        </tr>
+
+                        <tr>
+			    <!-- PO: controls the border around the words "1st Shift"
+				 on the right side, in the main navigation menu  -->
+                            <th style="width='50%'; width: 100%; border: 0px solid #000;">
+                                <strong><p>
+
+                                <a href="/oee/oeeoperatorefficiency.php" style="text-decoration: none; color: #000;">1st Shift</a>
+                            </th>
+			    <!-- PO: controls the border around the 1st Shift total in
+				 the main navigation menu  -->
+                            <th style="width='50%'; width: 100%; border: 0px solid #000;">
+                                <?php
+                                    $conn = connectRubiconTci();
+                                    echo firstShiftTotalManufacturingReceiptQuantity($conn);
+                                ?>
+                            </th>
+                        </tr>
+
+                        <tr>
+			    <!-- PO: controls the border around the text "2nd Shift" on
+				 the right side, in the main navigation menu  -->
+                            <th style="width='50%'; width: 100%; border: 0px solid #000;">
+                                <strong><p>
+                                <a href="/oee/oeeoperatorefficiency.php" style="text-decoration: none; color: #000;">2nd Shift</a>
+                            </th>
+			    <!-- PO: controls the border around the 2nd Shift numbers (footage) in the
+				 main navigation menu  -->
+                            <th style="width='50%'; width: 100%; border: 0px solid #000;">
+                                <?php
+                                    $conn = connectRubiconTci();
+                                    echo secondShiftTotalManufacturingReceiptQuantity($conn);
+                                ?>
+                            </th>
+                        </tr>
+
+                        <tr>
+			    <!-- PO: controls the border around the text "3rd Shift" -->
+                            <th style="width='50%'; width: 100%; border: 0px solid #000;">
+                                <strong><p>
+                                <a href="/oee/oeeoperatorefficiency.php" style="text-decoration: none; color: #000;">3rd Shift</a>
+                            </th style="width='50%'; width: 100%;">
+			    <!-- PO: controls the border around the 3rd Shift numbers (footage) in the
+				 main navigation menu  -->
+                            <th style="width='50%'; width: 100%; border: 0px solid #000;">
+                                <?php
+                                    $conn = connectRubiconTci();
+                                    echo thirdShiftTotalManufacturingReceiptQuantity($conn);
+                                ?>
+                            </th>
+                        </tr>
+
+                    </thead>
+	<!-- PO: End of navigation table -->
+                </table>
+<th style="text-align: center;">
+</body>
+</html>
