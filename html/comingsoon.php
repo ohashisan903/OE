@@ -23,11 +23,11 @@ require_once './functions/oeeFunctions.php';
 ?>
 <html>
 <head>
-    <title>TOEE</title>
+    <title>OE</title>
 	<!-- Load the chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<!-- A pointer to CSS that makes it pretty. -->
-	<link rel="stylesheet" href="newstyle.css">
+	<link rel="stylesheet" href="./css/style.css">
 	<!-- Real time updates on dashboard -->
 	<meta http-equiv="refresh" content="60">
 </head>

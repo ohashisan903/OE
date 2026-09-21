@@ -14,7 +14,7 @@ $extJSON = json_encode(array_map('floatval', array_values($monthlyScrap["ext"]))
 <html>
 <head>
     <title>Scrap Line Graph</title>
-    <link rel="stylesheet" href="newstyle.css">
+    <link rel="stylesheet" href="./css/newstyle.css">
     <meta http-equiv="refresh" content="60">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -31,7 +31,7 @@ $extJSON = json_encode(array_map('floatval', array_values($monthlyScrap["ext"]))
     Scrap Dashboard (Monthly)
 </h2>
 
-<canvas id="scrapLineChart" width="900" height="275"></canvas>
+<canvas id="scrapLineChart" width="1050" height="275"></canvas>
 
 <script>
 const ctx = document.getElementById('scrapLineChart').getContext('2d');

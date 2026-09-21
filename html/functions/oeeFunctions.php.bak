@@ -625,9 +625,8 @@ function firstShiftTotalManufacturingReceiptQuantity($conn) {
     }
 }
 
-// Operator monthly stats
+// Operator quarterly stats
 function displayMonthlyTransactionTotals($conn) {
-    /* PO: SQL for quarter totals in case we change the bonus plan back to quarterly
     $sql = "
     SELECT
       user_name,
@@ -655,44 +654,11 @@ function displayMonthlyTransactionTotals($conn) {
       CASE WHEN user_name = 'TOTAL' THEN 2 ELSE 1 END,
       total_qty DESC,
       user_name ASC;
-    "; */
+    ";
 
-    $sql = "
-	SELECT
-  		user_name,
-  		FORMAT(total_qty, 2) AS total_quantity
-	FROM (
-  	SELECT
-    		user_name,
-    	COALESCE(SUM(transaction_quantity), 0) AS total_qty
-  	FROM item_lrb_transactions
-  	WHERE type = 'Manufacturing Receipt'
-    		AND MONTH(created_date_time) = MONTH(CURDATE())
-    		AND YEAR(created_date_time) = YEAR(CURDATE())
-  	GROUP BY user_name
-
-  	UNION ALL
-
-  	SELECT
-    		'TOTAL' AS user_name,
-    		COALESCE(SUM(transaction_quantity), 0) AS total_qty
-  	FROM item_lrb_transactions
-  	WHERE type = 'Manufacturing Receipt'
-    		AND MONTH(created_date_time) = MONTH(CURDATE())
-    		AND YEAR(created_date_time) = YEAR(CURDATE())
-		) AS combined
-	ORDER BY
-  	CASE WHEN user_name = 'TOTAL' THEN 2 ELSE 1 END,
-  		total_qty DESC,
-  		user_name ASC;
-	";
-
-    /* PO: for quarterly results
     $currentMonth = date('n');
     $whichQuarter = ceil($currentMonth / 3);
-    */
 
-    $currentMonth = date('F'); // August, September, etc.
     $result = $conn->query($sql);
 
     if (!$result) {
@@ -703,7 +669,7 @@ function displayMonthlyTransactionTotals($conn) {
     echo '<table border="0" cellpadding="6" cellspacing="0" style="border-collapse: collapse; width: 50%;">';
     echo '<thead style="background-color: #ddd; text-align: left;">';
     echo '<tr><td colspan=2 style="text-algin: center;"><center><strong>Monthly Production KPI</strong></center></td></tr>';
-    echo '<tr><th>Operator</th><th>Total (' . $currentMonth . ')</th></tr>';
+    echo '<tr><th>Operator</th><th>Total (Q' . $whichQuarter . ')</th></tr>';
     echo '</thead><tbody>';
 
     $rowIndex = 0;  // to track user rows only (skip TOTAL row)
@@ -720,13 +686,8 @@ function displayMonthlyTransactionTotals($conn) {
         }
 
         echo '<tr style="' . $style . '">';
-
-	// Shadow: Horizontal offset, Vertical offset, Blur radius, rgba(0,0,0,0.4) = Shadow color and opacity
         echo '<td><a href="operators/user.php?user=' . htmlspecialchars($row['user_name'])
-        	. '&dbUser=" style="text-decoration: none; color: #36A2EB;
-		text-shadow: 1px 1px 0px rgba(0,0,0,0.5);">'
-		. htmlspecialchars($row['user_name']) . '</a></td>';
-
+        . '&dbUser=" style="text-decoration: none; color: black;">' . htmlspecialchars($row['user_name']) . '</a></td>';
         echo '<td style="text-align: right;">' . $row['total_quantity'] . '</td>';
         echo '</tr>';
     }
@@ -1179,12 +1140,8 @@ function indirectLaborWorkCentersDailyShort($conn) {
         return "<tr><td colspan='3' style=\"text-align: center; font-weight: bold;\">Work centers operational</td></tr>";
     }
 
-    $rows = '
-	<tr><td colspan="3" style="background: lightgrey; font-weight: bold; text-align: center;">
-	Work Center Down Time
-	</tr>
-	<tr><td colspan="3" style="background: lightgrey; font-weight: bold; text-align: center;">
-        <a href="indirectlaborworkcenter.php" style="text-decoration: none; color: blue;">'
+    $rows = '<tr><td colspan="3" style="background: lightgrey; font-weight: bold; text-align: center;">
+        <a href="indirectlaborworkcenter.php" style="text-decoration: none; color: #000;">'
         . date('l m/d') . '</a></td></tr>
         <tr>
             <td style="background: lightgrey; font-weight: bold; text-align: center; padding:10; margin:10;">Work Center</td>

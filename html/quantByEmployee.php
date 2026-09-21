@@ -59,7 +59,7 @@ if ($result) {
 	<!-- Load the chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<!-- A little CSS to make it pretty. Need more CSS for a professional look -->
-	<link rel="stylesheet" href="newstyle.css">
+	<link rel="stylesheet" href="./css/newstyle.css">
 	<!-- Real time updates on dashboard -->
 	<meta http-equiv="refresh" content="60">
 </head>

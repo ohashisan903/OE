@@ -20,7 +20,7 @@
 
 require_once './functions/oeeFunctions.php';
 require_once './functions/scrapFunction.php';
-require_once './functions/oee24hourfunctions.php';
+require_once './functions/oee24hourFunctions.php';
 #require_once './functions/oeeTestFunctions.php';
 ?>
 <html>

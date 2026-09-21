@@ -18,90 +18,63 @@
 #ini_set('display_startup_errors', 1);
 #error_reporting(E_ALL);
 
-require_once 'oeeFunctions.php';
+require_once './functions/oeeFunctions.php';
+require_once './functions/oeeFunctions2.php';
 require_once './functions/scrapFunction.php';
 #require_once 'oeeTestFunctions.php';
 ?>
 <html>
 <head>
-    <!-- meta tag below - change dashboard view every X seconds. bounce from the OE dashboard to the sales dashboard -->
-    <!--meta http-equiv="refresh" content="60; URL='https://tci-bt-linux01/dev-oee/salesdashboard.php'"-->
-    <title>DevTOE</title>
+	<title>OE</title>
 	<!-- Load the chart.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<!-- A pointer to CSS that:
-	 * Makes it pretty.
-	 * Adjusts the margins
-	 * Controls the scrollbars -->
-	<!--link rel="stylesheet" href="newstyledev.css"-->
-	<link rel="stylesheet" href="./css/newstyle.css">
-	<!-- Real time updates on dashboard -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<!-- Refresh the dashboard every 5 minutes  -->
 	<meta http-equiv="refresh" content="300">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<style>
-    /* Remove scrollbars */
-    html, body {
-        margin: 30;
-        padding: 0;
-        overflow-x:     /* hides or shows X scrollbars with 'hidden' or blank */
-        overflow-y:     /* hides or shows Y scrollbars with 'hidden' or blank */
-        height: 100%;
-        width: 100%;
-        background-color: #ffffff
-    }
-
-    /* Ensure tables shrink to fit inside viewport */
-    table {
-        max-width: 100%;
-        max-height: 100%;
-        border-collapse: collapse;
-    }
-    </style>
-    <!-- style: controls the display size of the dashboard in a browser -->
-<style>
-  body {
-    transform: scale(0.6);         /* Shrinks content to 80% (100% = 1.0) */
-    transform-origin: top left;    /* Keeps it aligned at top-left */
-    width: 125%;                   /* Compensates for shrinking to fill iframe width */
-    /* height: 100%;		   /* Compensates for shrinking to fill iframe height (This setting does strange things to the ticker) */
-    overflow: hidden;              /* Optional: remove scrollbars in iframe */
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-</style>
+	<!-- pointer to CSS  -->
+	<link rel="stylesheet" href="./css/oedashboard.css">
 
 </head>
 <body background=#ffffff>
-    <!-- PO: Controls the border that surrounds the entire dashboard,
-	     including the navigation menu -->
-    <table style="width: 50%; max-width: 100%; border: 0px solid #000;">
-	<tr>
-	   <td colspan=4>
-		<div style="display: flex; align-items: center;">
-    		<img src="pics/TransCableLogo.png" style="height: 60px; margin-right: 10px;">
-    		<h2 style="
-        		flex: 1;
-        		text-align: center;
-        		align: center;
-        		font-family: 'Poppins', sans-serif;
-        		font-size: 2.0em;
-        		background: linear-gradient(to right, #0077ff, #00c3ff);
-        		-webkit-background-clip: text;
-        		-webkit-text-fill-color: transparent;
-        		text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
-        		letter-spacing: 1px;
-        		margin: 0;
-    		">
-        	TCI Operational Efficiency
-    		</h2>
-	   </td>
-	</tr>
+<!-- PO: Header table with logo, four icons, TCI Operational Efficiency, four icons-->
+<table style="width: 100%; max-width: 100%; border: 0px solid #000;">
+    <tr>
+        <td colspan="4">
+
+    <div class="header-bar">
+
+        <!-- LEFT SIDE -->
+        <div class="header-left">
+            <img src="pics/TransCableLogo.png" class="header-logo">
+            <div class="header-left-text">
+	            Safety - Quality - Scrap - Rate
+            </div>
+        </div>
+
+        <!-- CENTER TITLE -->
+        <h2 class="header-title">
+            TCI Operational Efficiency
+        </h2>
+
+        <!-- RIGHT SIDE -->
+        <div class="header-right-text">
+                Safety - Quality - Scrap - Rate
+        </div>
+
+    </div>
+
+        </td>
+    </tr>
+</table>
+
+<!-- Master table with sub-tables embedded  -->
+<table style="width: 100%; border: 0px solid #000;">
         <tr> 
-            <!-- Left Column: Navigation table -->
             <td style="width: 1%; vertical-align: top;">
-                <!-- PO: Navigation Links (Main, Quantity, Operations)
-		     Controls the border around the navigation table, top left of dashboard  -->
-                <table style="
+
+            <!-- Table 1 with clock and navigation links (Main, Quantity, Operations, Monitor, and shift aggregate -->
+            <table style="
                     width: 50%;
                     border-collapse: collapse;
                     border: 0px solid #000;
@@ -113,29 +86,35 @@ require_once './functions/scrapFunction.php';
 			    <!-- PO: controls the border of the links in the main
 				 navigation menu table  -->
                             <th style="width: 100%; border: 0px solid #000;">
-                    <?php echo displayClock();?>
-                    <a href="http://tci-bt-linux01/oee/oee.php" style="text-decoration: none; color: #36A2EB;">Main</a>
-                    <br><hr color=#ddecf0>
-                    <a href="http://tci-bt-linux01/oee/quantByEmployee.php" style="text-decoration: none; color: #36A2EB;">Quantity</a>
-                    <br><hr color=#ddecf0>
-                    <a href="http://tci-bt-linux01/oee/operations.php" style="text-decoration: none; color: #36A2EB;">Operations</a>
-                    <hr color=#ddecf0>
-							</th>
+                    		<?php echo displayClock();?>
+                    		<a href="./oee.php" style="text-decoration: none; color: #36A2EB;">Main</a>
+                    		<br><hr color=#ddecf0>
+                    		<a href="./quantByEmployee.php" style="text-decoration: none; color: #36A2EB;">Quantity</a>
+                    		<br><hr color=#ddecf0>
+                    		<a href="./operations.php" style="text-decoration: none; color: #36A2EB;">Operations</a>
+                    		<hr color=#ddecf0>
+                    		<a href="./monitor/monitor.php" style="text-decoration: none; color: #36A2EB;">Monitor</a>
+                    		<hr color=#ddecf0>
+			    </th>
                         </tr>
+
                         <tr>
 			    <!-- PO: Controls a light blue border around the words
 				 "Shift Aggregate" in the main navigation menu  -->
-                            <td colspan=2 style="font-weight: bold; text-align: center; background-color: lightgrey; border: 0px solid #ddecf0;">
-                                Shift Aggregate
+                            <td colspan=2 style="font-weight: bold; text-align: center; background-color:
+ 						 lightgrey; border: 0px solid #ddecf0;">
+                                <a href="./oeeoperatorefficiency.php" style="text-decoration: none; color: #36A2EB;
+					text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);">Shift Aggregate</a>
                             </td>
                         </tr>
+
                         <tr>
 			    <!-- PO: controls the border around the words "1st Shift"
 				 on the right side, in the main navigation menu  -->
                             <th style="width='50%'; width: 100%; border: 0px solid #000;">
                                 <strong><p>
 
-                                <a href="http://tci-bt-linux01/oee/oeeoperatorefficiency.php" style="text-decoration: none; color: #000;">1st Shift</a>
+                                1st Shift
                             </th>
 			    <!-- PO: controls the border around the 1st Shift total in
 				 the main navigation menu  -->
@@ -146,12 +125,13 @@ require_once './functions/scrapFunction.php';
                                 ?>
                             </th>
                         </tr>
+
                         <tr>
 			    <!-- PO: controls the border around the text "2nd Shift" on
 				 the right side, in the main navigation menu  -->
                             <th style="width='50%'; width: 100%; border: 0px solid #000;">
                                 <strong><p>
-                                <a href="http://tci-bt-linux01/oee/oeeoperatorefficiency.php" style="text-decoration: none; color: #000;">2nd Shift</a>
+                                2nd Shift
                             </th>
 			    <!-- PO: controls the border around the 2nd Shift numbers (footage) in the
 				 main navigation menu  -->
@@ -161,11 +141,13 @@ require_once './functions/scrapFunction.php';
                                     echo secondShiftTotalManufacturingReceiptQuantity($conn);
                                 ?>
                             </th>
-                            <tr>
+                        </tr>
+
+                        <tr>
 			    <!-- PO: controls the border around the text "3rd Shift" -->
                             <th style="width='50%'; width: 100%; border: 0px solid #000;">
                                 <strong><p>
-                                <a href="http://tci-bt-linux01/oee/oeeoperatorefficiency.php" style="text-decoration: none; color: #000;">3rd Shift</a>
+                                3rd Shift
                             </th style="width='50%'; width: 100%;">
 			    <!-- PO: controls the border around the 3rd Shift numbers (footage) in the
 				 main navigation menu  -->
@@ -176,44 +158,57 @@ require_once './functions/scrapFunction.php';
                                 ?>
                             </th>
                         </tr>
+
+                        <tr>
+			    <!-- PO: controls the border around the text "24 Hour Report" -->
+                            <th style="width='50%'; width: 100%; border: 0px solid #000;">
+                                <strong><p>
+                                <a href="./24hourproductionoutput.php" style="text-decoration: none; color: #36A2EB;
+					text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);">24 Hour Report</a>
+                            </th style="width='50%'; width: 100%;">
+			    <!-- PO: controls the border around the 3rd Shift numbers (footage) in the
+				 main navigation menu  -->
+                            <th style="width='50%'; width: 100%; border: 0px solid #000;">
+                            </th>
                         </tr>
+
                     </thead>
                 </table>
             </td>
+	    <!-- End of navigation table 1  -->
 
-            <!-- PO: Table definition with tables for Operator table, LRB Manufacturing
-		 Receipt table, Sales gauge,
-                  Sales Order status, and Work Center down time -->
+            <!-- PO: Table definition with 4 tables; Operator table, LRB Manufacturing
+		 Receipt table, Sales gauge, Sales Order status, and Work Center down time -->
             <td style="width: 400px; align=left; text-align=left">
 
                 <!-- PO: Table with Operator, LRB Manufacturing, and Work Center tables -->
                 <table style="width: 350px; max-width: 50%; border: 0px solid #000;">
-                    <tbody style="align: center;">
-                        <strong></strong>
-					</tbody>
-                <!-- PO: controls the border around the Operator list with quarterly numbers -->
+
+                <!-- PO: controls working border around the Monthly Production KPI table with Operator numbers -->
                 <th style="width: 200px; border: 0px solid #000;">
                     <?php
 			$conn = connectRubiconTci();
-			displayQuarterlyTransactionTotals($conn);
+			displayMonthlyTransactionTotals($conn);
 		    ?>
-				</th>
+		</th>
+
                 <th style="text-align: center;">
 
-		<!-- PO: Border for table containing LRB Manufacturing Receipt, Sales Gague, Sales pie chart, and Work Center PWOs  -->
-                <table style="width: 100%; max-width: 100%; border: 0px solid #000;">
-
+		<!-- PO: Table containing LRB Manufacturing Receipt, Sales Gague, Sales pie chart, and Work Center PWOs  -->
+                <table style="width: 100%; max-width: 100%;">
                     <tr>
-                        <!--  Border for the table row with the text LRB Manufacturing Receipt -->
+                        <!--  Controls working border for the table row with the text LRB Manufacturing Receipt -->
                         <td colspan=3 style="text-align: center; background-color: lightgrey; border: 0px solid #000">
                             <strong>LRB Manufacturing Receipt</strong>
                         </td>
                     </tr>
 
+		    <!-- Row displays today's LRBs in Manufacturing Receipt  -->
                     <tr>
                         <td colspan=2 style="background-color: #ddecf0;">
                             <strong><p>
-                            <a href="lrbManufacturingReceipt.php?when=today" style="text-decoration: none; color: #000;">
+                            <a href="./lrbManufacturingReceipt.php?when=today" style="text-decoration: none; color: #36A2EB;
+					text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);">
                                 Today
                             </a>
                             </strong> <!-- (<?php echo date("m/d/y"); ?>)</span></p> -->
@@ -226,10 +221,12 @@ require_once './functions/scrapFunction.php';
                         </td>
                     </tr>
 
+		    <!-- Row displays 7-day LRBs in Manufacturing Receipt  -->
                     <tr>
                         <td colspan=2>
                             <strong><p>
-                            <a href="lrbManufacturingReceipt.php?when=7day" style="text-decoration: none; color: #000;">
+                            <a href="./lrbManufacturingReceipt.php?when=7day" style="text-decoration: none; color: #36A2EB;
+					text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);">
                                 7 day
                             </a></span></p>
                             </strong>
@@ -242,10 +239,12 @@ require_once './functions/scrapFunction.php';
                         </td>
                     </tr>
 
+		    <!-- Row displays 30-day LRBs in Manufacturing Receipt  -->
                     <tr>
                         <td colspan=2 style="background-color: #ddecf0;">
                             <strong><p>
-                            <a href="lrbManufacturingReceipt.php?when=30day" style="text-decoration: none; color: #000;">
+                            <a href="./lrbManufacturingReceipt.php?when=30day" style="text-decoration: none; color: #36A2EB;
+					text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);">
                             30 day</a>
                             </strong></p>
                         </td colspan=2>
@@ -257,9 +256,11 @@ require_once './functions/scrapFunction.php';
                         </td>
                     </tr>
 
+		    <!-- Row displays month-to-date LRBs in Manufacturing Receipt  -->
                     <tr>
                         <td colspan=2 style="background-color: ; font-weight: bold;">
-                            <a href="lrbManufacturingReceipt.php?when=thisMonth" style="text-decoration: none; color: #000;">
+                            <a href="./lrbManufacturingReceipt.php?when=thisMonth" style="text-decoration: none; color: #36A2EB;
+					text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);">
                             <?php
                                 $currentMonth = date('F');
                                 echo "$currentMonth";
@@ -279,20 +280,18 @@ require_once './functions/scrapFunction.php';
 			</td>
                     </tr>
                 </th>
-                    <!-- Table row for the monthly sales goal gage and pie chart with
+<!-- Table row for the monthly sales goal gauge and pie chart with
 			 Open Sales Orders -->
                 <tr>
-		<td></td> <!-- Empty first column for gague alignment -->
-                <td colspan=1>
-<center>
-			<!-- <hr --> <!-- PO: hr above the Sales gas gague -->
+                <td colspan="3" style="text-align: center;">
+			<!-- PO: hr above the Sales gas gague -->
 			<strong>
                         <?php
                             // Get the current month
                             $currentMonth = date('F');
                             // Get current day of the month
-                            $dayOfMonth = date('j');  // 1–31
-                            // Calculate week number (week 1 = days 1–7, week 2 = 8–14, etc.)
+                            $dayOfMonth = date('j');  
+                            // Calculate week number (week 1 = days 7, week 2 = 14, etc.)
                             $weekOfMonth = ceil($dayOfMonth / 7);
 
                             echo "$currentMonth Sales Goal<br> (Week $weekOfMonth)";
@@ -312,16 +311,15 @@ require_once './functions/scrapFunction.php';
                         $conn->close();
                     ?>
                     <!-- Load Chart.js for open sales orders pie chart -->
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js">
-                    </script>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                     <!-- Data Labels Plugin -->
                     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-                        <a href="salesdashboard.php">
-                            <div id="gauge_div" style="width: 200px; height: 200px; align: left;">
+                        <a href="./salesdashboard.php">
+                            <div id="gauge_div" style="width: 200px; height: 200px; align: center;">
                             </div>
                         </a>
                     <hr>
-			<!-- PO: controls the border around the "Status of Open Orders" pie chart -->
+			<!-- PO: controls working border around the "Status of Open Orders" pie chart -->
                         <div style="width: 250px; height: 250px; border: 0px solid #000; margin: 0 auto;">
                             <canvas id="statusChart" style="display: block; margin: auto;"></canvas>
                         </div>
@@ -340,7 +338,6 @@ require_once './functions/scrapFunction.php';
 
 			// Empty variable
 			$emptyVariable; 
-
                     ?>
                         <style>
                             /* Show text inside the gauge. Comment either gauge to hide */
@@ -352,8 +349,7 @@ require_once './functions/scrapFunction.php';
                             }
                         </style>
 
-                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
-                        </script>
+                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
                         <script type="text/javascript">
                           google.charts.load('current', {packages:['gauge']});
                           google.charts.setOnLoadCallback(drawChart);
@@ -389,14 +385,14 @@ require_once './functions/scrapFunction.php';
                         </script>
 			<!-- Breaks to drop content below the Sales Pie Chart -->
 			<br><br><br>
-			<a href='salesdashboard.php' style="text-decoration: none; color: black;">Sales Dashboard</a>
-</center>
+			<a href='./salesdashboard.php' style="text-decoration: none; color: black;">Sales Dashboard</a>
+<!-- End of Sales gauge and pie chart -->
                 </td>
 		<td style='text-align: center;'></td> <!-- 3rd column -->
                 </tr>
                 <tr>
                     <td colspan=3>
-<hr>
+			<hr>
                         <!-- Table definition for work center down time, Work Center,
 			     PWO, Time (Under pie chart) -->
                         <?php
@@ -462,16 +458,18 @@ require_once './functions/scrapFunction.php';
                         });
     </script>
                 <th>
-                    <!-- OE Work Center Output table (Top right table) -->
+                    <!-- OE Work Center Status table (Top right table) -->
 			<!-- PO: controls the border around the work center table  -->
                         <table style="width: 100%; max-width: 100%; border: 0px solid #000;">
+			    <tr  rowspan=2 style="background-color: lightgrey;">
+				<td colspan=4 style="font-size: 1.25rem; text-align: center;  font-weight: bold;">Work Center Status</td>
+			    </tr>
                             <tr rowspan=2 style="background-color: lightgrey;">
 				<!-- PO: controls the border around the "day, date" above
 				     the work center table -->
                                 <td colspan=10 style="font-weight: bold; font-size: 18px; text-align: center;
                                 border: 0px solid #000; border-collapse: collapse;">
-
-                                <?php echo date('l, m/d'); ?></strong>
+                                <?php echo date('l, m/d/y'); ?></strong>
                                 </p>
                                         <?php
                                             $fontSize = isset($_GET['size']) ? htmlspecialchars($_GET['size']) : '12px';
@@ -482,14 +480,8 @@ require_once './functions/scrapFunction.php';
                             <tr style="background-color: lightgrey; font-weight: bold; font-size: 16px;">
                                 <td width='50%' style="text-align: center;">Work Center</td>
                                 <td width='50%' style="text-align: center;">1st</td>
-                                <td width='50%' style="text-align: center;">U</td>
-                                <td width='50%' style="text-align: center;">E</td>
                                 <td style="text-align: center;">2nd</td>
-                                <td style="text-align: center;">U</td>
-                                <td style="text-align: center;">E</td>
                                 <td style="text-align: center;">3rd</td>
-                                <td style="text-align: center;">U</td>
-                                <td style="text-align: center;">E</td>
                                 <?php
                                     $conn = connectRubiconTci();
                                     echo workCenterOutput($conn);
@@ -498,18 +490,21 @@ require_once './functions/scrapFunction.php';
                             </tr>
                         </table>
 				<hr> <!-- PO: hr below the work center output table -->
-                        	<?php echo poweredBy();?>
+        		<div class="header-left">
+            		<div class="mission-statement-text">
+            			We manufacture to speficications, while delivering on time, within cost
+	     			parameters, in a clean and safe environment, while continually improving
+            		</div>
+        		</div>
             </td>
 	    <td> <!-- PO: 4th column -->
-			<table style="border: 0px solid; width: 300px;">
+			<table style="border: 0px solid; width: 100%>
 				<!-- TCI Scrap -->
 				<?php
 					$conn = connectRubiconTci();
-					#echo "<table border='1'>";
 					 echo "<tr style=\"background-color: lightgrey;\"><th colspan=4 style=\"text-align: center;\">TCI Scrap</th></tr>";
-					echo "<tr style=\"background-color: lightgrey;\"><th>Scrap Lbs</th><th>Scrap Qty</th><th>Scrap Ext</th><th><a href=scrap.php style=\"text-decoration: none; color: black; font-weight: bold;\">Today</a></th></tr>";
+					echo "<tr style=\"background-color: lightgrey;\"><th>Scrap Lbs</th><th>Scrap Qty</th><th>Scrap Ext</th><th><a href=scrapbyshiftdaily.php style=\"text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);\">Today</a></th></tr>";
 					echo getTodayScrapTotals($conn);
-					#echo "</table>";
 				?>
 				 </td>
 			     </tr>
@@ -548,13 +543,27 @@ require_once './functions/scrapFunction.php';
                                  <td colspan=4>
 				<iframe 
     					src="scraplinegraph.php" 
-    					width="750" 
-    					height="250" 
-    					style="border:0; overflow:hidden"
+    					width="100%" 
+    					height="350" 
+    					style="text-aligh: center; border:0; overflow:hidden"
     					scrolling="no">
 				</iframe>
 				<hr>
 			</table>
+
+
+<!-- PWO Labor History -->
+<table style="align: center; vertical-align: top;">
+	<tr>
+		<td>
+			<?php
+			$conn = connectRubiconTci();
+			 echo displayPwoLaborTable($conn);
+			?>
+		</td>
+	</tr>
+</table>
+
 <!-- TICKER -->
         <tr>
             <td>
@@ -615,5 +624,6 @@ require_once './functions/scrapFunction.php';
             </td>
         </tr>
     </table>
+    <?php echo poweredBy();?>
 </body>
 </html>

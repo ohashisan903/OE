@@ -1,0 +1,96 @@
+#!/usr/bin/php
+
+<?php
+
+require_once __DIR__ . '/../functions/oeeFunctions.php';
+require_once __DIR__ . './../functions/oee24hourFunctions.php';
+#require_once __DIR__ . '/../functions/scrapFunction.php';
+
+$conn = connectRubiconTci();
+
+ob_start();
+displayMonthlyTransactionTotals($conn);
+$table = ob_get_clean();
+
+ob_start();
+twentyFourHourWorkCenterOutput($conn);
+$table2 = ob_get_clean();
+
+ob_start();
+displayMonthlyTransactionTotals($conn);
+$table3 = ob_get_clean();
+
+$to = "paul.ohashi@transcableusa.com, paul.ohashi@transcableusa";
+$subject = "24 Hour Production Daily Report";
+
+$message = "
+<html>
+<head>
+
+    <style type='text/css'>
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            color: #333333;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: auto;
+            max-width: 150px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            font-size: 10px;
+            font-weight: bold;
+            text-align: left;
+            padding: 8px;
+            border: 1px solid #cccccc;
+        }
+
+        td {
+            font-size: 10px;
+            padding: 6px 8px;
+            border: 1px solid #cccccc;
+        }
+
+    </style>
+    <title>Manufacturing Receipts</title>
+</head>
+<body>
+
+<h2>Manufacturing Receipts Report</h2>
+
+<table>
+<tr>
+<td>
+$table
+</td>
+<td>
+BLAH<br>
+$table2
+</td>
+<td>
+$table3
+</td>
+</tr>
+</table>
+
+</body>
+</html>
+";
+
+$headers  = "MIME-Version: 1.0\r\n";
+$headers .= "Content-type:text/html;charset=UTF-8\r\n";
+$headers .= "From: tci-helpdesk@transcableusa.com\r\n";
+
+mail($to, $subject, $message, $headers);
+?>
+

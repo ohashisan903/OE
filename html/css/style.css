@@ -1,0 +1,82 @@
+/*
+CSS for TOEE - Trans Cable Overall Equipment Efficiency
+
+*/
+
+/* Table CSS */
+<style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            text-valign: top;
+            border: 0;
+        }
+        td, th {
+            padding: 6px 8px;
+            border: 0px solid #000;
+            text-align: left;
+			vertical-align: top;
+			white-space: nowrap;
+        }
+		tbody {
+			/* text-align: center; */
+		}
+</style>
+
+/* CSS for buttons */
+<style>
+	.button-container {
+	display: flex;
+	gap: 10px;
+	}
+
+	.button {
+		width: 100px;                 /* fixed width for consistency */
+		height: 15px;                 /* fixed height */
+		font-size: 12px;
+		text-align: center;
+		padding: 10px;
+		background-color: #007BFF;   /* match first button */
+		color: white;
+		border: none;
+		border-radius: 20px;          /* rounded shape */
+		text-decoration: none;       /* remove underline on <a> */
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: background-color 1.0s;
+	}
+
+	.button:hover {
+		background-color: #0056b3;   /* hover effect */
+	}
+</style>
+
+/* Table row background color */
+<style>
+  .highlight-row {
+    background-color: lightblue;
+  }
+</style>
+
+/* Progress Bar */
+<style>
+.progress-container {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 25px;
+    padding: 3px;
+}
+.progress-bar {
+    height: 30px;
+    width: 0%;
+    background-color: #4CAF50;
+    border-radius: 25px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    line-height: 30px;
+    transition: width 0.5s ease-in-out;
+}
+</style>

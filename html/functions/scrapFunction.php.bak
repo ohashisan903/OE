@@ -43,6 +43,7 @@ function getTodayScrapTotals($conn) {
     ";
 }
 
+
 function getMonthToDateScrapTotals($conn) {
 
     $sql = "
@@ -217,6 +218,7 @@ function getMonthlyScrapTotals($conn) {
 
 
 function getScrapTables24Hours() {
+
     $conn = connectRubiconTci();
 
     /*
@@ -250,14 +252,19 @@ function getScrapTables24Hours() {
         $currentShiftStart = date('Y-m-d') . ' 16:00:00';
     }
 
+
     /*
      * Build the three completed shifts.
      */
+
     $shiftEnd = new DateTime($currentShiftStart);
+
     $shifts = [];
 
     for ($i = 1; $i <= 3; $i++) {
+
         $shiftStart = clone $shiftEnd;
+
         $shiftStart->modify('-8 hours');
 
         $shifts[] = [
@@ -268,23 +275,32 @@ function getScrapTables24Hours() {
         $shiftEnd = clone $shiftStart;
     }
 
+
     /*
      * Display oldest shift first.
      */
+
     $shifts = array_reverse($shifts);
+
 
     /*
      * 24-HOUR GRAND TOTALS
      */
+
     $grandTotalScrapLbs      = 0;
     $grandTotalScrapQuantity = 0;
     $grandTotalScrapCost     = 0;
     $grandTotalRecords       = 0;
 
+
+    /*
+     * SQL query.
+     */
+
     $sql = "
         SELECT
-            item_number,
-            DATE_FORMAT(created_date_time, '%m/%d %l:%i %p') AS created_date_time,
+            pwo_number,
+            created_date_time,
             scrap_lbs_ext,
             scrap_quantity,
             scrap_ext,
@@ -298,28 +314,35 @@ function getScrapTables24Hours() {
         ORDER BY created_date_time DESC
     ";
 
+
     $html = '';
+
 
     /*
      * ==========================================================
      * 24-HOUR SUMMARY
      * ==========================================================
      *
-     * Calculate the grand totals after processing
+     * We'll calculate the grand totals after processing
      * the three shifts, so the summary will be inserted
      * after all totals are known.
      *
+     * We temporarily store the shift HTML here.
      */
+
     $shiftHtml = '';
+
 
     foreach ($shifts as $shift) {
 
         $startDateTime = $shift['start'];
         $endDateTime   = $shift['end'];
 
+
         /*
          * Determine shift name.
          */
+
         $startHour = (int)date(
             'H',
             strtotime($startDateTime)
@@ -338,64 +361,82 @@ function getScrapTables24Hours() {
             $shiftName = '2nd Shift';
         }
 
+
         /*
          * Determine the shift date.
          */
+
         $shiftDate = date(
             'F j, Y',
             strtotime($startDateTime)
         );
 
+
         /*
          * Prepare SQL statement.
          */
+
         $stmt = $conn->prepare($sql);
+
         if (!$stmt) {
+
             $shiftHtml .= "
                 <div class='database-error'>
                     SQL Prepare Error:
                     " . htmlspecialchars($conn->error) . "
                 </div>
             ";
+
             continue;
         }
+
 
         /*
          * Bind shift start/end times.
          */
+
         $stmt->bind_param(
             'ss',
             $startDateTime,
             $endDateTime
         );
 
+
         /*
          * Execute query.
          */
+
         $stmt->execute();
 
         $result = $stmt->get_result();
 
+
         /*
          * Shift totals.
          */
+
         $totalScrapLbs      = 0;
         $totalScrapQuantity = 0;
         $totalScrapCost     = 0;
         $recordCount        = 0;
 
+
         /*
          * Store rows so we can calculate totals before
          * displaying the table.
          */
+
         $rows = [];
 
         while ($row = $result->fetch_assoc()) {
+
             $rows[] = $row;
+
 
             /*
              * Shift totals.
              */
+
             $totalScrapLbs +=
                 (float)($row['scrap_lbs_ext'] ?? 0);
 
@@ -407,9 +448,11 @@ function getScrapTables24Hours() {
 
             $recordCount++;
 
+
             /*
              * Grand 24-hour totals.
              */
+
             $grandTotalScrapLbs +=
                 (float)($row['scrap_lbs_ext'] ?? 0);
 
@@ -422,13 +465,17 @@ function getScrapTables24Hours() {
             $grandTotalRecords++;
         }
 
+
         /*
          * ======================================================
          * SHIFT TABLE
          * ======================================================
          */
+
         $shiftHtml .= "
+
             <div class='scrap-shift-section'>
+
                 <h2 class='scrap-table-title'>
                     $shiftName - $shiftDate
                 </h2>
@@ -449,12 +496,17 @@ function getScrapTables24Hours() {
                     "
                 </div>
 
+
                 <!-- SHIFT SUMMARY -->
+
                 <div class='scrap-summary'>
+
                     <div class='summary-item'>
+
                         <span class='summary-label'>
                             Total Scrap
                         </span>
+
                         <span class='summary-value'>
                             " .
                             number_format(
@@ -463,12 +515,16 @@ function getScrapTables24Hours() {
                             ) .
                             " lbs
                         </span>
+
                     </div>
 
+
                     <div class='summary-item'>
+
                         <span class='summary-label'>
-                            Scrap Quantity (ft.)
+                            Scrap Quantity
                         </span>
+
                         <span class='summary-value'>
                             " .
                             number_format(
@@ -477,12 +533,16 @@ function getScrapTables24Hours() {
                             ) .
                             "
                         </span>
+
                     </div>
 
+
                     <div class='summary-item'>
+
                         <span class='summary-label'>
                             Total Cost
                         </span>
+
                         <span class='summary-value'>
                             $" .
                             number_format(
@@ -491,62 +551,87 @@ function getScrapTables24Hours() {
                             ) .
                             "
                         </span>
+
                     </div>
 
+
                     <div class='summary-item'>
+
                         <span class='summary-label'>
                             Records
                         </span>
+
                         <span class='summary-value'>
                             $recordCount
                         </span>
+
                     </div>
+
                 </div>
 
+
                 <!-- SCRAP TABLE -->
+
                 <table class='scrap-table'>
+
                     <thead>
-                        <tr style=\"background-color: lightgrey;\">
-                            <th>Item</th>
+
+                        <tr>
+                            <th>PWO Number</th>
                             <th>Created Date/Time</th>
                             <th>Scrap Lbs</th>
-                            <th>Scrap Quantity (ft.)</th>
+                            <th>Scrap Quantity</th>
                             <th>Scrap Cost</th>
                             <th>Scrap Reason</th>
                             <th>Created By</th>
                             <th>Verified By</th>
                         </tr>
+
                     </thead>
+
                     <tbody>
         ";
+
 
         /*
          * Display records.
          */
+
         if ($recordCount === 0) {
+
             $shiftHtml .= "
+
                 <tr>
+
                     <td colspan='8' class='no-data'>
                         No scrap records found for this shift.
                     </td>
+
                 </tr>
+
             ";
 
         } else {
+
             foreach ($rows as $row) {
+
                 /*
                  * PWO Number
                  */
-                $item_number = htmlspecialchars(
-                    $row['item_number'] ?? ''
+
+                $pwoNumber = htmlspecialchars(
+                    $row['pwo_number'] ?? ''
                 );
+
 
                 /*
                  * Date / Time
                  */
+
                 $createdDateTime = '';
 
                 if (!empty($row['created_date_time'])) {
+
                     $createdDateTime = date(
                         'm/d/Y g:i A',
                         strtotime(
@@ -555,9 +640,11 @@ function getScrapTables24Hours() {
                     );
                 }
 
+
                 /*
                  * Scrap pounds
                  */
+
                 $scrapLbs = number_format(
                     (float)(
                         $row['scrap_lbs_ext'] ?? 0
@@ -565,9 +652,11 @@ function getScrapTables24Hours() {
                     2
                 );
 
+
                 /*
                  * Scrap quantity
                  */
+
                 $scrapQuantity = number_format(
                     (float)(
                         $row['scrap_quantity'] ?? 0
@@ -575,9 +664,11 @@ function getScrapTables24Hours() {
                     2
                 );
 
+
                 /*
                  * Scrap cost
                  */
+
                 $scrapCost = '$' . number_format(
                     (float)(
                         $row['scrap_ext'] ?? 0
@@ -585,57 +676,85 @@ function getScrapTables24Hours() {
                     2
                 );
 
+
                 /*
                  * Scrap reason
                  */
+
                 $scrapReason = htmlspecialchars(
                     $row['scrap_reason'] ?? ''
                 );
 
+
                 /*
                  * Created by
                  */
+
                 $createdBy = htmlspecialchars(
                     $row['created_by_user'] ?? ''
                 );
 
+
                 /*
                  * Verified by
                  */
+
                 $verifiedBy = htmlspecialchars(
                     $row['verified_by'] ?? ''
                 );
 
+
                 /*
                  * Add row.
                  */
+
                 $shiftHtml .= "
+
                     <tr>
-                        <td>$item_number</td>
+
+                        <td>$pwoNumber</td>
+
                         <td>$createdDateTime</td>
+
                         <td>$scrapLbs</td>
+
                         <td>$scrapQuantity</td>
+
                         <td>$scrapCost</td>
+
                         <td>$scrapReason</td>
+
                         <td>$createdBy</td>
+
                         <td>$verifiedBy</td>
+
                     </tr>
+
                 ";
             }
         }
 
+
         /*
          * Close table.
          */
+
         $shiftHtml .= "
+
                     </tbody>
+
                 </table>
+
             </div>
+
         ";
 
+
         $result->free();
+
         $stmt->close();
     }
+
 
     /*
      * ==========================================================
@@ -646,12 +765,17 @@ function getScrapTables24Hours() {
     $html .= "
 
         <div class='scrap-24hour-summary'>
+
             <h2 class='scrap-24hour-title'>
                 Last 24 Hours Scrap Summary
             </h2>
 
+
             <div class='scrap-24hour-summary-items'>
+
+
                 <div class='summary-item grand-total'>
+
                     <span class='summary-label'>
                         Total Scrap
                     </span>
@@ -664,11 +788,14 @@ function getScrapTables24Hours() {
                         ) .
                         " lbs
                     </span>
+
                 </div>
 
+
                 <div class='summary-item grand-total'>
+
                     <span class='summary-label'>
-                        Scrap Quantity (ft.)
+                        Scrap Quantity
                     </span>
 
                     <span class='summary-value'>
@@ -679,9 +806,12 @@ function getScrapTables24Hours() {
                         ) .
                         "
                     </span>
+
                 </div>
 
+
                 <div class='summary-item grand-total'>
+
                     <span class='summary-label'>
                         Total Cost
                     </span>
@@ -694,9 +824,12 @@ function getScrapTables24Hours() {
                         ) .
                         "
                     </span>
+
                 </div>
 
+
                 <div class='summary-item grand-total'>
+
                     <span class='summary-label'>
                         Total Records
                     </span>
@@ -704,17 +837,31 @@ function getScrapTables24Hours() {
                     <span class='summary-value'>
                         $grandTotalRecords
                     </span>
+
                 </div>
+
+
             </div>
+
         </div>
+
     ";
+
 
     /*
      * Add the three shift tables.
      */
+
     $html .= $shiftHtml;
 
+
+    /*
+     * Close connection.
+     */
+
     $conn->close();
+
+
     return $html;
 }
 

@@ -104,7 +104,7 @@ require_once './functions/scrapFunction.php';
                             <td colspan=2 style="font-weight: bold; text-align: center; background-color:
  						 lightgrey; border: 0px solid #ddecf0;">
                                 <a href="./oeeoperatorefficiency.php" style="text-decoration: none; color: #36A2EB;
-					text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);">Shift Aggregate (LRB)</a>
+					text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);">Shift Aggregate</a>
                             </td>
                         </tr>
 
@@ -306,7 +306,7 @@ The gauge and pie chart are in oee.php.withSalesGaugeAndPieChart
 			<!-- PO: controls the border around the work center table  -->
                         <table style="width: 100%; max-width: 100%; border: 0px solid #000;">
 			    <tr  rowspan=2 style="background-color: lightgrey;">
-				<td colspan=4 style="font-size: 1.25rem; text-align: center;  font-weight: bold;">Work Center Status (LRB)</td>
+				<td colspan=4 style="font-size: 1.25rem; text-align: center;  font-weight: bold;">Work Center Status</td>
 			    </tr>
                             <tr rowspan=2 style="background-color: lightgrey;">
 				<!-- PO: controls the border around the "day, date" above
