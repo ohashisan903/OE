@@ -69,13 +69,13 @@ require_once './functions/scrapFunction.php';
 </table>
 
 <!-- Master table with sub-tables embedded  -->
-<table style="width: 100%; border: 1px solid #000;">
+<table style="width: 100%; border: 0px solid #000;">
         <tr> 
-            <td style="width: 100%; vertical-align: top;">
+            <td style="width: 1%; vertical-align: top;">
 
             <!-- Table 1 with clock and navigation links (Main, Quantity, Operations, Monitor, and shift aggregate -->
             <table style="
-                    width: 100px;
+                    width: 50%;
                     border-collapse: collapse;
                     border: 0px solid #000;
                     box-shadow:
@@ -104,7 +104,7 @@ require_once './functions/scrapFunction.php';
                             <td colspan=2 style="font-weight: bold; text-align: center; background-color:
  						 lightgrey; border: 0px solid #ddecf0;">
                                 <a href="./oeeoperatorefficiency.php" style="text-decoration: none; color: #36A2EB;
-					text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);">Shift Aggregate (LRB)</a>
+					text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);">Shift Aggregate</a>
                             </td>
                         </tr>
 
@@ -276,22 +276,15 @@ require_once './functions/scrapFunction.php';
                         </td>
 		    <tr>
 			<td colspan=3>
-			<!-- hr -->
+			<!--   hr  #PO - Below LRB Manufacturing Receipt table -->
 			</td>
                     </tr>
                 </th>
-
-<!-- 
-Table row for the monthly sales goal gauge and pie chart with Open Sales Orders
-The gauge and pie chart are in oee.php.withSalesGaugeAndPieChart
--->
-
-                </td>
-		<td style='text-align: center;'></td> <!-- 3rd column -->
-                </tr>
+</table>
+<table>
                 <tr>
                     <td colspan=3>
-			<!-- hr -->
+			<!--   hr   -->
                         <!-- Table definition for work center down time, Work Center,
 			     PWO, Time (Under pie chart) -->
                         <?php
@@ -301,12 +294,67 @@ The gauge and pie chart are in oee.php.withSalesGaugeAndPieChart
                     </td>
                 </tr>
                 </table>
+    <script>
+        const links = {
+            'Canceled':             'openOrderStatus.php?report=canceledOrders',
+            'Completed':            'openOrderStatus.php?report=completedOrders',
+            'Partially Shipped':    'openOrderStatus.php?report=partiallyShipped',
+            'Picking':              'openOrderStatus.php?report=pickingOpenOrders',
+            'Open':                 'openOrderStatus.php?report=openOpenOrders',
+            'On Hold':              'openOrderStatus.php?report=onHoldOperOrders'
+        };
+        const ctx = document.getElementById('statusChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'pie',
+                data: {
+                    labels: <?php echo json_encode($labels); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($data); ?>,
+                            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#8BC34A']
+                        }]
+                        },
+                        options: {
+                            responsive: false,
+			    maintainAspectRatio: false,
+                            onClick: function (evt, elements) {
+                            if (elements.length > 0) {
+                                const chartIndex = elements[0].index;
+                                const label = chart.data.labels[chartIndex];
+                                const url = links[label];
+                                    if (url) {
+                                        window.location.href = url;
+                                    }
+                            }
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Status of Open Orders'
+                                },
+                                datalabels: {
+                                    color: '#000',
+                                    font: {
+                                        weight: 'bold',
+                                        size: 14
+                                    },
+                                    formatter: function(value) {
+                                                return value;
+                                    }
+                                }
+                            }
+                        },
+                            plugins: [ChartDataLabels]
+                        });
+    </script>
                 <th>
                     <!-- OE Work Center Status table (Top right table) -->
 			<!-- PO: controls the border around the work center table  -->
                         <table style="width: 100%; max-width: 100%; border: 0px solid #000;">
 			    <tr  rowspan=2 style="background-color: lightgrey;">
-				<td colspan=4 style="font-size: 1.25rem; text-align: center;  font-weight: bold;">Work Center Status (LRB)</td>
+				<td colspan=4 style="font-size: 1.25rem; text-align: center;  font-weight: bold;">Work Center Status</td>
 			    </tr>
                             <tr rowspan=2 style="background-color: lightgrey;">
 				<!-- PO: controls the border around the "day, date" above
@@ -340,15 +388,18 @@ The gauge and pie chart are in oee.php.withSalesGaugeAndPieChart
 	     			parameters, in a clean and safe environment, while continually improving
             		</div>
         		</div>
+				<hr> <!-- PO: hr below the company motto -->
             </td>
 	    <td> <!-- PO: 4th column -->
-			<table style="border: 0px solid; width: 100%>
+			<table style="border: 0px solid; width: 100%;">
 				<!-- TCI Scrap -->
 				<?php
 					$conn = connectRubiconTci();
+					#echo "<table border='1'>";
 					 echo "<tr style=\"background-color: lightgrey;\"><th colspan=4 style=\"text-align: center;\">TCI Scrap</th></tr>";
-					echo "<tr style=\"background-color: lightgrey;\"><th>Scrap Lbs</th><th>Scrap Qty</th><th>Scrap Ext</th><th><a href=scrapbyshiftdaily.php style=\"text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);\">Today</a></th></tr>";
+					echo "<tr style=\"background-color: lightgrey;\"><th>Scrap Lbs</th><th>Scrap Qty</th><th>Scrap Ext</th><th><a href=scrap.php style=\"text-decoration: none; color: #36A2EB; text-shadow: 1px 1px 0px rgba(0,0,0,0.5);\">Today</a></th></tr>";
 					echo getTodayScrapTotals($conn);
+					#echo "</table>";
 				?>
 				 </td>
 			     </tr>
@@ -387,25 +438,24 @@ The gauge and pie chart are in oee.php.withSalesGaugeAndPieChart
                                  <td colspan=4>
 				<iframe 
     					src="scraplinegraph.php" 
-    					width="100%" 
+    					width="880" 
     					height="350" 
-    					style="text-aligh: center; border:0; overflow:hidden"
+    					style="border:0; overflow:hidden"
     					scrolling="no">
 				</iframe>
-				<hr>
 			</table>
 
+<table style="vertical-align: top;">
+    <tr>
+	<td>
 
-<!-- PWO Labor History -->
-<table style="align: center; vertical-align: top;">
-	<tr>
-		<td>
-			<?php
+		<?php
 			$conn = connectRubiconTci();
-			 echo displayPwoLaborTable($conn);
-			?>
-		</td>
-	</tr>
+			displayPwoLaborTable($conn);
+		?>
+
+	</td>
+    </tr>
 </table>
 
 <!-- TICKER -->

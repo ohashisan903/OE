@@ -11,15 +11,17 @@
 #ini_set('display_startup_errors', 1);
 #error_reporting(E_ALL);
 
-require_once 'oeeFunctions.php';
+require_once './functions/oeeFunctions.php';
+require_once './functions/oeeFunctions2.php';
+
 ?>
 <html>
 <head>
-    <title>TOEE</title>
+    <title>OE</title>
 	<!-- Load the chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<!-- A pointer to CSS that makes it pretty. -->
-	<link rel="stylesheet" href="./css/newstyle.css">
+	<link rel="stylesheet" href="newstyle.css">
 	<!-- Real time updates on dashboard -->
 	<meta http-equiv="refresh" content="60">
 </head>
@@ -62,29 +64,14 @@ require_once 'oeeFunctions.php';
                 </table>
             </td>
             <td>
-                <table style="width: 100%; border: 1px solid #000;">
-                    <tr>
-                        <td>
-                            <div style="display: flex; width: 100%;">
-                                <div style="width: 33%;">
-                                    <table style="width: 100%; border: 1px solid #ccc;">
-                                        <!-- Left content -->L
-                                    </table>
-                                </div>
-                                <div style="width: 33%;">
-                                    <table style="width: 100%; border: 1px solid #ccc;">
-                                        <!-- Middle content -->M
-                                    </table>
-                                </div>
-                                <div style="width: 33%;">
-                                    <table style="width: 100%; border: 1px solid #ccc;">
-                                        <!-- Right content -->R
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+		<table>
+		    <tr>
+			<td>
+
+<!-- New table data here -->
+
+		    	</td>
+		    </tr>
             </td>
         </tr>
     </table>

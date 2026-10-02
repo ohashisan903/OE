@@ -4,10 +4,10 @@ Paul Ohashi
 oeeFunctions.php - Function for connecting to, and pulling data from Rubicon's MariaDG:
 */
 function connectRubiconTci() {
-    $host = '';
-    $user = '';
-    $pass = '';
-    $db   = '';
+    $host = 'rubicon.transcableusa.com';
+    $user = 'paul';
+    $pass = 'lNpFSa9S4j5rqOJ';
+    $db   = 'tci';
 
     $conn = new mysqli($host, $user, $pass, $db);
 

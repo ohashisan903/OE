@@ -17,7 +17,7 @@ body {
 table {
     border-collapse: collapse;
     width: 100%;
-    text-align: left;
+    text-align: center;
     border: 0px;
 }
 
@@ -31,7 +31,7 @@ td, th {
 
 /* Optional tbody center alignment */
 tbody {
-    /* text-align: center; */
+    text-align: center;
 }
 
 /* Highlighted row */

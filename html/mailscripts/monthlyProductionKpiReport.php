@@ -3,25 +3,62 @@
 <?php
 
 require_once __DIR__ . '/../functions/oeeFunctions.php';
+require_once __DIR__ . '/../functions/oeeEmailFunctions.php';
 require_once __DIR__ . '/../functions/scrapFunction.php';
 
 $conn = connectRubiconTci();
 
 ob_start();
-displayMonthlyTransactionTotals($conn);
+displayMonthlyTransactionTotalsEmail($conn);
 $table = ob_get_clean();
 
-$to = "paul.ohashi@transcableusa.com, paul.ohashi@transcableusa";
-$subject = "TCI Manufacturing Receipts Report";
+# Comma delimited list of addresses
+$to = "paul.ohashi@transcableusa.com, paul.ohashi@ohashisan.com";
+# Email subject
+$subject = "TCI Operational Efficiency Reports";
 
+# Email body/message
 $message = "
 <html>
+    <style type='text/css'>
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            color: #333333;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: auto;
+            max-width: 100px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            font-size: 10px;
+            font-weight: bold;
+            text-align: left;
+            padding: 8px;
+            border: 1px solid #cccccc;
+        }
+
+        td {
+            font-size: 13px;
+            padding: 6px 8px;
+            border: 1px solid #cccccc;
+        }
+
+    </style>
 <head>
-    <title>Manufacturing Receipts</title>
+    <title>Monthly Operator KPI</title>
 </head>
 <body>
-
-<h2>Manufacturing Receipts Report</h2>
 
 $table
 

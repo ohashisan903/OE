@@ -3,6 +3,9 @@
 function displayPwoLaborTable($conn)
 {
 
+echo "pwoTable.php<br>";
+
+
     // Found some time clock issues between UTC (Linux), PHP time and MariaDB time, so
     // this function was re-written to make PHP the authority of time.
     // TCI is in Central Time
@@ -165,7 +168,7 @@ function displayPwoLaborTable($conn)
                         text-align: center;
                         font-weight: bold;
                     ">
-                        <a href="./displayPwoLabor24HourTable.php">PWO Labor History</a> - ' . $shiftName . '
+                        PWO Labor History - ' . $shiftName . '
                     </span>
 
                     <span style="
@@ -406,11 +409,6 @@ function firstShiftPwoLaborHistoryYesterday()
 
     $result->free();
 }
-
-
-
-
-
 
 ?>
 
